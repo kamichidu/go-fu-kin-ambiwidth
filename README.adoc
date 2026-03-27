@@ -1,0 +1,89 @@
+= faw (go-fu-kin-ambiwidth)
+:toc: left
+:toc-title: Table of Contents
+:sectnums:
+
+A sincere **fu*k** to all ambiguous widths.
+
+== Background and Rage
+
+Historically, Unicode standards have been dominated by Western-centric perspectives.
+The resulting concept of "East Asian Ambiguous" width has been a source of endless suffering for engineers in East Asia for decades.
+
+For those of us who dearly love **SKK**, it is a matter of life and death that symbols and special characters are treated as width "2." Yet,
+the world is crawling with unforgivable terminal software that, from a Western-centric viewpoint, treats all ambiguous widths as "1" by default.
+
+This sterile conflict over "width 1 or 2" breaks displays, ruins cursor positions, and severely hampers our productivity.
+
+`faw` (fu*k ambiwidth) was born out of pure rage against this status quo.
+
+Stop begging terminal developers for the mercy of "correct display."
+We don't need their permission.
+By combining tools that we control, we will bury this piece of s*it problem ourselves.
+That is the philosophy of `faw`.
+
+== How It Works
+
+`faw` runs a specified command under a pseudo-terminal (PTY) and monitors/processes its output in real-time.
+
+When it detects a character with ambiguous width, it immediately replaces it with a pre-defined "width-1 alternative string" (mostly ASCII).
+This ensures that regardless of how the terminal interprets the character, the physical display width is fixed at "1," preventing the layout from breaking.
+
+== Installation
+
+With Go 1.25 or later installed, run the following command:
+
+[source,bash]
+----
+go install github.com/kamichidu/go-fu-kin-ambiwidth/cmd/faw@latest
+----
+
+== Usage
+
+Usage is dead simple. Just prefix your usual command with `faw`.
+
+[source,bash]
+----
+faw gemini
+----
+
+That's it.
+`faw` works behind the scenes to eliminate the ambiguous width characters that cause display issues.
+
+== Configuration
+
+By default, `faw` looks for `~/.config/faw/faw.map` (or `$XDG_CONFIG_HOME/faw/faw.map`).
+
+In this map file, you define which Unicode code points should be replaced by which strings.
+
+[source,text]
+----
+;; faw.map format
+;; <CodePoint> <Space> <AlternateString>
+U+25CB o  ;; Replace ○ with o
+U+25B3 ^  ;; Replace △ with ^
+U+25A1 [] ;; Replace □ with []
+----
+
+If the map file does not exist, an internal default table (covering about 300 characters) is used.
+
+=== Options
+
+* `--map-file <path>`: Specify a custom map file.
+* `--track`: Automatically record all ambiguous width characters encountered during execution and add them to the map file.
+
+== Dealing with Unknown Ambiguous Characters
+
+If you encounter a character that still breaks the display, run with the `--track` option.
+
+[source,bash]
+----
+faw --track gemini
+----
+
+In this mode, `faw` monitors the output and automatically appends any ambiguous width characters it finds to `faw.map`.
+You can then edit the map to your liking and build your own perfect input environment.
+
+== License
+
+MIT License
