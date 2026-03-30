@@ -29,6 +29,14 @@ That is the philosophy of `faw`.
 When it detects a character with ambiguous width, it immediately replaces it with a pre-defined "width-1 alternative string" (mostly ASCII).
 This ensures that regardless of how the terminal interprets the character, the physical display width is fixed at "1," preventing the layout from breaking.
 
+[cols="a,a", frame=none, grid=none]
+|===
+| .Without `faw`
+image:assets/demo.gemini-without-faw.gif[]
+| .With `faw`
+image:assets/demo.gemini-with-faw.gif[]
+|===
+
 == Installation
 
 With Go 1.25 or later installed, run the following command:
